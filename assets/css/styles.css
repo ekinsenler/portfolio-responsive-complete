@@ -322,6 +322,40 @@ img {
   transform: scale(1.1);
 }
 
+#projects {
+  padding: 20px;
+}
+
+.projects-list {
+  list-style: none;
+  padding: 0;
+}
+
+.project-item {
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #eee;
+}
+
+.project-item h3 {
+  margin: 0;
+  color: #333;
+}
+
+.project-item p {
+  margin: 10px 0;
+  color: #666;
+}
+
+.project-item a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.project-item a:hover {
+  text-decoration: underline;
+}
+
 /* ===== CONTACT =====*/
 .contact__input {
   width: 100%;
@@ -334,12 +368,15 @@ img {
   margin-bottom: var(--mb-4);
 }
 .contact__button {
-  display: block;
-  border: none;
-  outline: none;
-  font-size: var(--normal-font-size);
-  cursor: pointer;
-  margin-left: auto;
+  /* Existing styles */
+  background-color: #007bff; /* Blue background */
+  color: #ffffff; /* White text */
+  padding: 10px 20px; /* Top/bottom and left/right padding */
+  border-radius: 5px; /* Rounded corners */
+  transition: background-color 0.3s; /* Smooth background color change on hover */
+}
+.contact__button:hover {
+  background-color: #0056b3; /* Darker blue on hover */
 }
 
 /* ===== FOOTER =====*/
