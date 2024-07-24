@@ -338,10 +338,23 @@ img {
 }
 
 .project-item h3 {
+  display: flex;
   margin: 0;
   color: #333;
+  align-items: center;
+  flex-direction: row;
 }
 
+.project-item h5 {
+  display: flex;
+  margin-top: 0%;
+  color: #333;
+}
+.project-logo {
+  display: flex;
+  margin-left: 50px;
+  margin-bottom: -60px;
+}
 .project-item p {
   margin: 10px 0;
   color: #666;
