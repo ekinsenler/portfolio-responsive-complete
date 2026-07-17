@@ -1,0 +1,22 @@
+{
+  "name": "Ekin Senler — AI Engineer",
+  "short_name": "Ekin Senler",
+  "description": "Portfolio of Ekin Senler, AI Engineer.",
+  "icons": [
+    {
+      "src": "/favicon/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "theme_color": "#3e6ff4",
+  "background_color": "#ffffff",
+  "display": "standalone",
+  "start_url": "/"
+}
