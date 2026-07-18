@@ -30,20 +30,27 @@ test('nav link scrolls to the contact anchor', async ({ page }) => {
   await expect(page).toHaveURL(/#contact$/);
 });
 
-test('mobile menu button exposes and updates aria-expanded', async ({ page }) => {
-  await page.setViewportSize({ width: 390, height: 800 });
+test('mobile menu is off-screen by default and slides in on toggle', async ({ page }) => {
+  const width = 390;
+  await page.setViewportSize({ width, height: 800 });
   await page.goto('/');
 
   const toggle = page.locator('#nav-toggle');
-  await expect(toggle).toHaveAttribute('aria-expanded', 'false');
+  const menu = page.locator('#nav-menu');
 
+  // Closed by default: the drawer sits off the right edge of the viewport.
+  await expect(toggle).toHaveAttribute('aria-expanded', 'false');
+  await expect(menu).not.toBeInViewport();
+
+  // Opens on toggle and slides into view (assertion retries through the animation).
   await toggle.click();
   await expect(toggle).toHaveAttribute('aria-expanded', 'true');
-  await expect(page.locator('#nav-menu')).toBeVisible();
+  await expect(menu).toBeInViewport({ ratio: 0.5 });
 
-  // Selecting a destination closes the menu.
+  // Selecting a destination closes the menu again.
   await page.locator('#nav-menu .nav__link', { hasText: 'About' }).click();
   await expect(toggle).toHaveAttribute('aria-expanded', 'false');
+  await expect(menu).not.toBeInViewport();
 });
 
 test('theme toggle switches theme and persists across reloads', async ({ page }) => {
