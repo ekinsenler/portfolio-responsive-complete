@@ -1,0 +1,39 @@
+---
+import { site } from '../data/site';
+
+/**
+ * Person + WebSite structured data. Only verified facts are used:
+ * name, role, canonical URL, social profiles, and universities from site.ts.
+ * `knowsAbout` reflects domains represented by the owner's actual projects.
+ */
+const person = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: site.fullName,
+  url: site.url,
+  jobTitle: site.role,
+  sameAs: site.socials.map((s) => s.href),
+  alumniOf: site.education.map((e) => ({
+    '@type': 'CollegeOrUniversity',
+    name: e.institution,
+  })),
+  knowsAbout: [
+    'Artificial Intelligence',
+    'Machine Learning',
+    'Deep Learning',
+    'Natural Language Processing',
+    'Computer Vision',
+  ],
+};
+
+const website = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: site.siteName,
+  url: site.url,
+  author: { '@type': 'Person', name: site.fullName },
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(person)} is:inline />
+<script type="application/ld+json" set:html={JSON.stringify(website)} is:inline />

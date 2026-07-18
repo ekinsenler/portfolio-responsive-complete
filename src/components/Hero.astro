@@ -1,0 +1,158 @@
+---
+import { Image } from 'astro:assets';
+import { site } from '../data/site';
+import Icon from './Icon.astro';
+import ppAi from '../assets/img/pp_ai.png';
+
+// Preserve the original blob silhouette as a CSS mask over an optimized photo.
+const blobPath =
+  'M9.19024 145.964C34.0253 76.5814 114.865 54.7299 184.111 29.4823C245.804 6.98884 311.86 -14.9503 370.735 14.143C431.207 44.026 467.948 107.508 477.191 174.311C485.897 237.229 454.931 294.377 416.506 344.954C373.74 401.245 326.068 462.801 255.442 466.189C179.416 469.835 111.552 422.137 65.1576 361.805C17.4835 299.81 -17.1617 219.583 9.19024 145.964Z';
+const blobSvg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 479 467'><path d='${blobPath}' fill='black'/></svg>`;
+const blobMask = `url("data:image/svg+xml,${encodeURIComponent(blobSvg)}") center / contain no-repeat`;
+---
+
+<section class="hero section container" id="home">
+  <div class="hero__data" data-reveal>
+    <p class="eyebrow">{site.role}</p>
+    <h1 class="hero__title">Hi, I&rsquo;m <span class="hero__name">{site.firstName}</span></h1>
+    <p class="hero__lead">
+      I build machine-learning systems &mdash; spanning NLP, computer vision, and LLM applications
+      &mdash; with an MSc in Artificial Intelligence &amp; Robotics.
+    </p>
+
+    <div class="hero__actions">
+      <a href="#contact" class="button button--primary">
+        <Icon name="mail" size={18} /> Get in touch
+      </a>
+      <a href="#projects" class="button button--ghost">View projects</a>
+      {
+        site.cv.available && (
+          <a href={site.cv.path} class="button button--ghost" download>
+            <Icon name="download" size={18} /> Download CV
+          </a>
+        )
+      }
+    </div>
+
+    <ul class="hero__social">
+      {
+        site.socials.map((social) => (
+          <li>
+            <a
+              href={social.href}
+              class="hero__social-link"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`${site.fullName} on ${social.label}`}
+            >
+              <Icon name={social.icon} size={22} />
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+
+  <div class="hero__figure" data-reveal>
+    <div class="hero__blob" style={`-webkit-mask:${blobMask};mask:${blobMask};`}>
+      <Image
+        src={ppAi}
+        alt={`${site.fullName}, ${site.role}`}
+        class="hero__photo"
+        widths={[320, 440, 640, 880]}
+        sizes="(max-width: 767px) 60vw, 400px"
+        loading="eager"
+        fetchpriority="high"
+      />
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    display: grid;
+    align-items: center;
+    gap: var(--space-xl);
+    padding-block: var(--space-2xl) var(--space-xl);
+    min-height: calc(100svh - var(--header-height));
+  }
+
+  .hero__title {
+    font-size: var(--fs-900);
+    margin-block: var(--space-2xs) var(--space-sm);
+  }
+
+  .hero__name {
+    color: var(--color-brand);
+  }
+
+  .hero__lead {
+    color: var(--color-text-muted);
+    font-size: var(--fs-600);
+    max-width: 34ch;
+    margin-bottom: var(--space-lg);
+  }
+
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-lg);
+  }
+
+  .hero__social {
+    list-style: none;
+    display: flex;
+    gap: var(--space-sm);
+    padding: 0;
+    margin: 0;
+  }
+
+  .hero__social-link {
+    display: inline-grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: var(--radius-full);
+    border: var(--border-width) solid var(--color-border);
+    color: var(--color-text);
+    transition:
+      color var(--transition-fast) var(--ease-out),
+      border-color var(--transition-fast) var(--ease-out),
+      transform var(--transition-fast) var(--ease-out);
+  }
+
+  .hero__social-link:hover {
+    color: var(--color-brand);
+    border-color: var(--color-brand);
+    transform: translateY(-2px);
+  }
+
+  .hero__figure {
+    display: grid;
+    place-items: center;
+  }
+
+  .hero__blob {
+    aspect-ratio: 479 / 467;
+    width: min(78vw, 24rem);
+    background: linear-gradient(160deg, var(--color-accent), var(--color-brand-hover));
+  }
+
+  .hero__photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+  }
+
+  @media (min-width: 768px) {
+    .hero {
+      grid-template-columns: 1.1fr 0.9fr;
+    }
+
+    .hero__figure {
+      order: 2;
+    }
+  }
+</style>

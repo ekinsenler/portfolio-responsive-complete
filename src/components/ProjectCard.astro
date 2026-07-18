@@ -1,0 +1,174 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import Icon from './Icon.astro';
+
+interface Props {
+  title: string;
+  context?: string;
+  tags?: string[];
+  links?: { label: string; href: string }[];
+  logo?: ImageMetadata;
+  logoAlt?: string;
+  featured?: boolean;
+}
+
+const { title, context, tags = [], links = [], logo, logoAlt, featured = false } = Astro.props;
+---
+
+<article class:list={['card', { 'card--featured': featured }]} data-reveal>
+  <div class="card__head">
+    <h3 class="card__title">{title}</h3>
+    {
+      logo && (
+        <Image
+          src={logo}
+          alt={logoAlt ?? ''}
+          class="card__logo"
+          widths={[80, 150]}
+          sizes="80px"
+          loading="lazy"
+        />
+      )
+    }
+  </div>
+
+  {context && <p class="card__context">{context}</p>}
+
+  <div class="card__body">
+    <slot />
+  </div>
+
+  {
+    tags.length > 0 && (
+      <ul class="card__tags" aria-label="Technologies">
+        {tags.map((tag) => (
+          <li class="card__tag">{tag}</li>
+        ))}
+      </ul>
+    )
+  }
+
+  {
+    links.length > 0 && (
+      <div class="card__links">
+        {links.map((link) => (
+          <a
+            href={link.href}
+            class="card__link"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`${link.label} — ${title}`}
+          >
+            {link.label}
+            <Icon name="arrow-up-right" size={16} />
+          </a>
+        ))}
+      </div>
+    )
+  }
+</article>
+
+<style>
+  .card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    padding: var(--space-lg);
+    background-color: var(--color-surface);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    height: 100%;
+    transition:
+      transform var(--transition-fast) var(--ease-out),
+      box-shadow var(--transition-fast) var(--ease-out),
+      border-color var(--transition-fast) var(--ease-out);
+  }
+
+  .card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+    border-color: color-mix(in srgb, var(--color-brand) 40%, var(--color-border));
+  }
+
+  .card--featured {
+    border-color: color-mix(in srgb, var(--color-brand) 55%, var(--color-border));
+    background: linear-gradient(180deg, var(--color-accent-soft), var(--color-surface) 45%);
+  }
+
+  .card__head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-sm);
+  }
+
+  .card__title {
+    font-size: var(--fs-700);
+  }
+
+  .card__logo {
+    width: 3.25rem;
+    height: auto;
+    flex-shrink: 0;
+    border-radius: var(--radius-sm);
+  }
+
+  .card__context {
+    font-size: var(--fs-400);
+    font-weight: var(--fw-semibold);
+    color: var(--color-brand);
+  }
+
+  .card__body {
+    color: var(--color-text-muted);
+    font-size: var(--fs-400);
+  }
+
+  .card__body :global(p + p) {
+    margin-top: var(--space-sm);
+  }
+
+  .card__tags {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2xs);
+    padding: 0;
+    margin: 0;
+  }
+
+  .card__tag {
+    font-size: var(--fs-300);
+    font-weight: var(--fw-semibold);
+    color: var(--color-text-muted);
+    background-color: var(--color-surface-2);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-full);
+    padding: 0.2rem 0.7rem;
+  }
+
+  .card__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-md);
+    margin-top: auto;
+    padding-top: var(--space-2xs);
+  }
+
+  .card__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-weight: var(--fw-semibold);
+    font-size: var(--fs-400);
+    text-decoration: none;
+    color: var(--color-brand);
+  }
+
+  .card__link:hover {
+    color: var(--color-brand-hover);
+    text-decoration: underline;
+  }
+</style>

@@ -1,0 +1,45 @@
+---
+import { getCollection, render } from 'astro:content';
+import ProjectCard from './ProjectCard.astro';
+
+const entries = (await getCollection('projects'))
+  .filter((entry) => !entry.data.draft)
+  .sort((a, b) => a.data.order - b.data.order);
+
+const projects = await Promise.all(
+  entries.map(async (entry) => ({
+    data: entry.data,
+    Content: (await render(entry)).Content,
+  }))
+);
+---
+
+<section class="projects section container" id="projects">
+  <h2 class="section__title" data-reveal>Academic Projects</h2>
+
+  <div class="projects__grid">
+    {
+      projects.map(({ data, Content }) => (
+        <ProjectCard
+          title={data.title}
+          context={data.context}
+          tags={data.tags}
+          links={data.links}
+          logo={data.logo}
+          logoAlt={data.logoAlt}
+          featured={data.featured}
+        >
+          <Content />
+        </ProjectCard>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  .projects__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 20rem), 1fr));
+    gap: var(--space-lg);
+  }
+</style>

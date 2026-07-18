@@ -16,6 +16,7 @@
     "check": "astro check",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
+    "og": "node scripts/generate-og.mjs",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "test": "playwright test",

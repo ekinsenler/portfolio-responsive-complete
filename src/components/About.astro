@@ -1,0 +1,130 @@
+---
+import { Image } from 'astro:assets';
+import { site } from '../data/site';
+import aboutImg from '../assets/img/pp_background.jpeg';
+---
+
+<section class="about section container" id="about">
+  <h2 class="section__title" data-reveal>About</h2>
+
+  <div class="about__grid">
+    <div class="about__figure" data-reveal>
+      <Image
+        src={aboutImg}
+        alt={site.fullName}
+        class="about__photo"
+        widths={[320, 480, 640]}
+        sizes="(max-width: 767px) 80vw, 340px"
+        loading="lazy"
+      />
+    </div>
+
+    <div class="about__body" data-reveal>
+      <p class="about__text">{site.about}</p>
+
+      <h3 class="about__subheading">Education</h3>
+      <ul class="about__education">
+        {
+          site.education.map((item) => (
+            <li>
+              <span class="about__degree">
+                {item.degree} in {item.field}
+              </span>
+              <span class="about__institution">{item.institution}</span>
+            </li>
+          ))
+        }
+      </ul>
+
+      <h3 class="about__subheading">Certifications</h3>
+      <div class="about__badges">
+        {
+          site.credlyBadgeIds.map((id) => (
+            <div
+              data-iframe-width="150"
+              data-iframe-height="270"
+              data-share-badge-id={id}
+              data-share-badge-host="https://www.credly.com"
+            />
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Credly badge embed (third-party). Loaded once, async, over HTTPS. -->
+<script is:inline async src="https://cdn.credly.com/assets/utilities/embed.js"></script>
+
+<style>
+  .about__grid {
+    display: grid;
+    gap: var(--space-xl);
+    align-items: start;
+  }
+
+  .about__figure {
+    max-width: 340px;
+    margin-inline: auto;
+  }
+
+  .about__photo {
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+  }
+
+  .about__text {
+    font-size: var(--fs-600);
+    color: var(--color-text);
+    margin-bottom: var(--space-lg);
+  }
+
+  .about__subheading {
+    font-size: var(--fs-700);
+    margin-bottom: var(--space-sm);
+  }
+
+  .about__education {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 var(--space-lg);
+    display: grid;
+    gap: var(--space-sm);
+  }
+
+  .about__education li {
+    display: grid;
+    gap: 0.1rem;
+    padding-left: var(--space-sm);
+    border-left: 3px solid var(--color-brand);
+  }
+
+  .about__degree {
+    font-weight: var(--fw-semibold);
+    color: var(--color-heading);
+  }
+
+  .about__institution {
+    color: var(--color-text-muted);
+    font-size: var(--fs-400);
+  }
+
+  .about__badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-md);
+    min-height: 1rem;
+  }
+
+  @media (min-width: 768px) {
+    .about__grid {
+      grid-template-columns: 340px 1fr;
+    }
+
+    .about__figure {
+      margin-inline: 0;
+    }
+  }
+</style>

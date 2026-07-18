@@ -1,0 +1,38 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Page not found" noindex={true}>
+  <section class="notfound section container">
+    <p class="eyebrow">404</p>
+    <h1 class="notfound__title">Page not found</h1>
+    <p class="notfound__text">
+      The page you&rsquo;re looking for doesn&rsquo;t exist or may have moved.
+    </p>
+    <a href="/" class="button button--primary notfound__cta">Back to home</a>
+  </section>
+
+  <style>
+    .notfound {
+      min-height: 60svh;
+      display: grid;
+      place-content: center;
+      justify-items: center;
+      text-align: center;
+      gap: var(--space-sm);
+    }
+
+    .notfound__title {
+      font-size: var(--fs-800);
+    }
+
+    .notfound__text {
+      color: var(--color-text-muted);
+      max-width: 40ch;
+    }
+
+    .notfound__cta {
+      margin-top: var(--space-sm);
+    }
+  </style>
+</BaseLayout>

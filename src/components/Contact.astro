@@ -1,0 +1,184 @@
+---
+import { site } from '../data/site';
+import Icon from './Icon.astro';
+---
+
+<section class="contact section container" id="contact">
+  <h2 class="section__title" data-reveal>Contact</h2>
+
+  <div class="contact__grid" data-reveal>
+    <p class="contact__lead">
+      Have a question or want to work together? Send me a message and I&rsquo;ll get back to you.
+    </p>
+
+    <form id="contact-form" class="contact__form" action={site.formspreeEndpoint} method="POST">
+      <input type="hidden" name="_subject" value="New message from ekinsenler.com" />
+
+      <div class="field">
+        <label class="field__label" for="name">Name</label>
+        <input
+          class="field__input"
+          type="text"
+          id="name"
+          name="name"
+          autocomplete="name"
+          required
+        />
+      </div>
+
+      <div class="field">
+        <label class="field__label" for="email">Email</label>
+        <input
+          class="field__input"
+          type="email"
+          id="email"
+          name="email"
+          autocomplete="email"
+          required
+        />
+      </div>
+
+      <div class="field">
+        <label class="field__label" for="message">Message</label>
+        <textarea class="field__input" id="message" name="message" rows="6" required></textarea>
+      </div>
+
+      <!-- Honeypot: hidden from humans, tempting to bots. Formspree drops matches. -->
+      <div class="field field--honeypot" aria-hidden="true">
+        <label for="company">Company (leave blank)</label>
+        <input type="text" id="company" name="_gotcha" tabindex="-1" autocomplete="off" />
+      </div>
+
+      <button type="submit" class="button button--primary contact__submit">
+        <Icon name="mail" size={18} /> Send message
+      </button>
+
+      <p id="form-status" class="contact__status" role="status" aria-live="polite"></p>
+    </form>
+  </div>
+</section>
+
+<script>
+  const form = document.getElementById('contact-form') as HTMLFormElement | null;
+  const status = document.getElementById('form-status');
+
+  if (form && status) {
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      const data = new FormData(form);
+      // Honeypot tripped -> silently accept (do not reveal to bots), send nothing.
+      if (data.get('_gotcha')) {
+        form.reset();
+        return;
+      }
+
+      const submit = form.querySelector('button[type="submit"]') as HTMLButtonElement;
+      submit.disabled = true;
+      status.dataset.state = 'pending';
+      status.textContent = 'Sending…';
+
+      try {
+        const response = await fetch(form.action, {
+          method: 'POST',
+          body: data,
+          headers: { Accept: 'application/json' },
+        });
+
+        if (response.ok) {
+          form.reset();
+          status.dataset.state = 'success';
+          status.textContent = 'Thanks! Your message has been sent.';
+        } else {
+          const payload = await response.json().catch(() => null);
+          const message =
+            payload?.errors?.map((e: { message: string }) => e.message).join(', ') ||
+            'Something went wrong. Please try again, or reach me on LinkedIn.';
+          status.dataset.state = 'error';
+          status.textContent = message;
+        }
+      } catch {
+        status.dataset.state = 'error';
+        status.textContent = 'Network error. Please try again later.';
+      } finally {
+        submit.disabled = false;
+      }
+    });
+  }
+</script>
+
+<style>
+  .contact__grid {
+    display: grid;
+    gap: var(--space-xl);
+    max-width: 42rem;
+  }
+
+  .contact__lead {
+    font-size: var(--fs-600);
+    color: var(--color-text-muted);
+  }
+
+  .contact__form {
+    display: grid;
+    gap: var(--space-md);
+  }
+
+  .field {
+    display: grid;
+    gap: 0.35rem;
+  }
+
+  .field__label {
+    font-weight: var(--fw-semibold);
+    font-size: var(--fs-400);
+    color: var(--color-heading);
+  }
+
+  .field__input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background-color: var(--color-surface);
+    color: var(--color-text);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-md);
+    transition: border-color var(--transition-fast) var(--ease-out);
+  }
+
+  .field__input:focus-visible {
+    border-color: var(--color-brand);
+    outline-offset: 1px;
+  }
+
+  textarea.field__input {
+    resize: vertical;
+    min-height: 8rem;
+  }
+
+  .field--honeypot {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  .contact__submit {
+    justify-self: start;
+  }
+
+  .contact__status {
+    font-size: var(--fs-400);
+    min-height: 1.25rem;
+  }
+
+  .contact__status[data-state='success'] {
+    color: color-mix(in srgb, var(--color-brand) 50%, green);
+    font-weight: var(--fw-semibold);
+  }
+
+  .contact__status[data-state='error'] {
+    color: hsl(0 70% 45%);
+    font-weight: var(--fw-semibold);
+  }
+</style>

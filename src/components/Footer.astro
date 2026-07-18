@@ -1,0 +1,93 @@
+---
+import { site } from '../data/site';
+import Icon from './Icon.astro';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <div class="footer__inner container">
+    <div class="footer__brand">
+      <p class="footer__name">{site.fullName}</p>
+      <p class="footer__role">{site.role}</p>
+    </div>
+
+    <ul class="footer__social">
+      {
+        site.socials.map((social) => (
+          <li>
+            <a
+              href={social.href}
+              class="footer__social-link"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`${site.fullName} on ${social.label}`}
+            >
+              <Icon name={social.icon} size={20} />
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+
+    <p class="footer__copy">&copy; {year} {site.fullName}. All rights reserved.</p>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background-color: var(--color-surface);
+    border-top: var(--border-width) solid var(--color-border);
+    padding-block: var(--space-xl);
+    margin-top: var(--space-2xl);
+  }
+
+  .footer__inner {
+    display: grid;
+    gap: var(--space-md);
+    justify-items: center;
+    text-align: center;
+  }
+
+  .footer__name {
+    font-size: var(--fs-600);
+    font-weight: var(--fw-bold);
+    color: var(--color-heading);
+  }
+
+  .footer__role {
+    color: var(--color-text-muted);
+    font-size: var(--fs-400);
+  }
+
+  .footer__social {
+    list-style: none;
+    display: flex;
+    gap: var(--space-sm);
+    padding: 0;
+    margin: 0;
+  }
+
+  .footer__social-link {
+    display: inline-grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: var(--radius-full);
+    border: var(--border-width) solid var(--color-border);
+    color: var(--color-text);
+    transition:
+      color var(--transition-fast) var(--ease-out),
+      border-color var(--transition-fast) var(--ease-out);
+  }
+
+  .footer__social-link:hover {
+    color: var(--color-brand);
+    border-color: var(--color-brand);
+  }
+
+  .footer__copy {
+    color: var(--color-text-muted);
+    font-size: var(--fs-300);
+  }
+</style>
