@@ -59,9 +59,11 @@ for (const file of files) {
       target = join(dist, 'index.html');
     } else if (path.startsWith('/')) {
       const clean = path.replace(/\/$/, '');
-      target = [join(dist, clean), join(dist, `${clean}.html`), join(dist, clean, 'index.html')].find(
-        existsSync
-      );
+      target = [
+        join(dist, clean),
+        join(dist, `${clean}.html`),
+        join(dist, clean, 'index.html'),
+      ].find(existsSync);
     } else {
       target = join(dirname(file), path);
     }
